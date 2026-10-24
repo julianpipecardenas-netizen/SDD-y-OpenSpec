@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Reserva de espacios{% endblock %}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+    label { display: block; margin-top: 1rem; font-weight: 600; }
+    input { width: 100%; padding: .5rem; box-sizing: border-box; }
+    button { margin-top: 1rem; padding: .5rem 1rem; cursor: pointer; }
+    .error { border-left: 4px solid #b00020; background: #fdecea; padding: .5rem 1rem; margin: 1rem 0; }
+    .codigo { font-family: monospace; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <h1>Reserva de espacios académicos</h1>
+  {% block contenido %}{% endblock %}
+</body>
+</html>

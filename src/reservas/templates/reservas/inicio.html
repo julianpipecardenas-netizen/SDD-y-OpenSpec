@@ -1,0 +1,10 @@
+{% extends "reservas/base.html" %}
+{% block titulo %}Inicio{% endblock %}
+{% block contenido %}
+  <h2>Hola, {{ user.nombre }}</h2>
+  <p>Rol: {{ user.get_rol_display }}</p>
+  <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Cerrar sesión</button>
+  </form>
+{% endblock %}
