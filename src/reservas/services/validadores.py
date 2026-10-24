@@ -35,6 +35,9 @@ class ContextoReserva:
         fecha, hora_inicio, hora_fin: datos solicitados.
         espacio: el `Espacio` ya resuelto, o `None` si no existe.
         ahora: instante actual con zona horaria (reloj inyectable, D9).
+        reservas_existentes: pares `(hora_inicio, hora_fin)` de las reservas
+            activas del mismo espacio y fecha (ámbito de la regla de
+            conflicto; lo decide quien arma el contexto, no la regla).
     """
 
     espacio_id: Any
@@ -43,6 +46,7 @@ class ContextoReserva:
     hora_fin: Any
     espacio: Optional[Any]
     ahora: datetime
+    reservas_existentes: tuple = ()
 
 
 def ejecutar_validadores(contexto, validadores):
@@ -139,11 +143,34 @@ def validar_no_en_el_pasado(contexto):
         raise ErrorDominio(errores.RESERVA_EN_PASADO)
 
 
+def hay_solapamiento(inicio_a, fin_a, inicio_b, fin_b):
+    """Dos rangos semiabiertos se solapan si el inicio de cada uno es anterior al fin del otro.
+
+    Los rangos contiguos (el fin de uno es el inicio del otro) no se solapan
+    (design D7, supuesto P11).
+    """
+    return inicio_a < fin_b and inicio_b < fin_a
+
+
+def validar_no_solapamiento(contexto):
+    """El rango solicitado no se solapa con ninguna reserva existente del contexto.
+
+    Solo necesita las reservas existentes y el rango solicitado: no usa base
+    de datos, sesión ni interfaz (spec validacion-conflictos-horario /
+    Regla verificable de forma aislada).
+    """
+    _, inicio, fin = interpretar_horario(contexto)
+    for inicio_existente, fin_existente in contexto.reservas_existentes:
+        if hay_solapamiento(inicio, fin, inicio_existente, fin_existente):
+            raise ErrorDominio(errores.CONFLICTO_HORARIO)
+
+
 # Orden fijado por la spec creacion-reservas / Orden de validación y atomicidad.
-# La regla de conflicto de horario se registra al final en la tarea 5.3.
+# El conflicto de horario va al final: solo se evalúa si todo lo demás es válido.
 VALIDADORES_RESERVA = (
     validar_datos_obligatorios,
     validar_rango_horario,
     validar_espacio_activo,
     validar_no_en_el_pasado,
+    validar_no_solapamiento,
 )
