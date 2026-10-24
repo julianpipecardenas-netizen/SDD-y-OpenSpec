@@ -11,6 +11,7 @@ Aplicación web para consultar la disponibilidad y reservar espacios académicos
 | `PLAN_INGENIERIA.md` | Planificación y justificación técnica inicial |
 | `openspec/` | Especificaciones, propuestas, diseño y tareas (OpenSpec) |
 | `docs/REVISION_ESPECIFICACIONES.md` | Registro de la revisión de las especificaciones |
+| `INFORME_FINAL.md` | Resultados, trazabilidad y conclusiones del proceso SDD |
 
 ## Requisitos previos
 
@@ -71,6 +72,8 @@ Los demás usuarios (estudiantes y docentes) no se registran solos: los crea el 
 python src/manage.py runserver
 ```
 - Sistema: <http://127.0.0.1:8000/> (pide iniciar sesión con correo y contraseña).
+- Disponibilidad: <http://127.0.0.1:8000/disponibilidad/>.
+- Reservas propias (o todas, para administración): <http://127.0.0.1:8000/reservas/>.
 - Panel de administración: <http://127.0.0.1:8000/admin/>.
 
 Para detener el servidor, pulsa `Ctrl + C`.
@@ -80,7 +83,9 @@ Para detener el servidor, pulsa `Ctrl + C`.
 ```
 pytest
 ```
-Ejecuta toda la suite desde la raíz del repositorio con el entorno virtual activado.
+Ejecuta toda la suite desde la raíz del repositorio con el entorno virtual activado. La prueba de rendimiento comprueba que consultar un día con 1000 reservas repartidas entre fechas tarda menos de 2 segundos.
+
+Para comprobar la trazabilidad básica entre escenarios OpenSpec y docstrings de pruebas: `python scripts_verificar_trazabilidad.py`. La salida debe revisarse como apoyo; no sustituye la comprobación manual escenario por escenario.
 
 ## Configuración
 
