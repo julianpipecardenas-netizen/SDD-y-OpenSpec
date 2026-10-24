@@ -39,11 +39,11 @@
 
 ## 5. Validación de conflictos de horario (`validacion-conflictos-horario`)
 
-- [ ] 5.1 Implementar el validador de no solapamiento como función independiente, y verificar con pruebas unitarias sin base de datos los escenarios de solapamiento parcial por ambos extremos, rango contenido, rango que contiene e idéntico, y que las reservas contiguas no son conflicto
-- [ ] 5.2 Aplicar el ámbito de la regla (solo reservas `activa` del mismo espacio y fecha), y verificar con pruebas de base de datos los escenarios de reserva cancelada, otro espacio, otra fecha y conflicto con el mismo usuario
-- [ ] 5.3 Registrar el validador como último de la lista del servicio, y verificar con una prueba que `HORARIO_INVALIDO` se informa antes que `CONFLICTO_HORARIO`
-- [ ] 5.4 Hacer atómica la comprobación y la inserción de la reserva (design D7), y verificar con una prueba de concurrencia con hilos que solo una de dos solicitudes simultáneas queda activa y la otra recibe `CONFLICTO_HORARIO`
-- [ ] 5.5 Mostrar el conflicto en la vista de creación con el mensaje «El espacio ya está reservado en ese horario», y verificar con una prueba de integración que se muestra el código y ese mensaje
+- [x] 5.1 Implementar el validador de no solapamiento como función independiente, y verificar con pruebas unitarias sin base de datos los escenarios de solapamiento parcial por ambos extremos, rango contenido, rango que contiene e idéntico, y que las reservas contiguas no son conflicto
+- [x] 5.2 Aplicar el ámbito de la regla (solo reservas `activa` del mismo espacio y fecha), y verificar con pruebas de base de datos los escenarios de reserva cancelada, otro espacio, otra fecha y conflicto con el mismo usuario
+- [x] 5.3 Registrar el validador como último de la lista del servicio, y verificar con una prueba que `HORARIO_INVALIDO` se informa antes que `CONFLICTO_HORARIO`
+- [x] 5.4 Hacer atómica la comprobación y la inserción de la reserva (design D7), y verificar con una prueba de concurrencia con hilos que solo una de dos solicitudes simultáneas queda activa y la otra recibe `CONFLICTO_HORARIO`
+- [x] 5.5 Mostrar el conflicto en la vista de creación con el mensaje «El espacio ya está reservado en ese horario», y verificar con una prueba de integración que se muestra el código y ese mensaje
 
 ## 6. Consulta de disponibilidad (`consulta-disponibilidad`)
 
