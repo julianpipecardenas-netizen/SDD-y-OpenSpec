@@ -4,19 +4,19 @@
 
 ## 1. Preparación del proyecto
 
-- [ ] 1.1 Crear el entorno virtual y `requirements.txt` con Django y pytest-django, y verificar que `pip install -r requirements.txt` termina sin errores
-- [ ] 1.2 Crear el proyecto Django en `src/config/` y la aplicación `src/reservas/` con zona horaria America/Bogota, y verificar que `python src/manage.py check` no reporta problemas
-- [ ] 1.3 Configurar pytest (`pytest.ini` con la ruta de `src` y los ajustes de Django) con una prueba mínima, y verificar que `pytest` se ejecuta y pasa
-- [ ] 1.4 Redactar la sección inicial del `README.md` (instalación y ejecución de servidor y pruebas, RNF-03) y verificar que los comandos documentados funcionan tal como están escritos
+- [x] 1.1 Crear el entorno virtual y `requirements.txt` con Django y pytest-django, y verificar que `pip install -r requirements.txt` termina sin errores
+- [x] 1.2 Crear el proyecto Django en `src/config/` y la aplicación `src/reservas/` con zona horaria America/Bogota, y verificar que `python src/manage.py check` no reporta problemas
+- [x] 1.3 Configurar pytest (`pytest.ini` con la ruta de `src` y los ajustes de Django) con una prueba mínima, y verificar que `pytest` se ejecuta y pasa
+- [x] 1.4 Redactar la sección inicial del `README.md` (instalación y ejecución de servidor y pruebas, RNF-03) y verificar que los comandos documentados funcionan tal como están escritos
 
 ## 2. Autenticación y roles (`autenticacion-roles`)
 
-- [ ] 2.1 Implementar el error de dominio con `codigo` y `mensaje` y la lista de códigos de design D5, y verificar con pruebas unitarias que cada código existe y que el error expone ambos campos
-- [ ] 2.2 Crear el modelo de usuario propio (correo único, nombre y `rol` con los tres valores) con su migración, y verificar con pruebas los escenarios «Usuario con un único rol» y «Contraseña no recuperable» (requisitos «Roles reconocidos» y «Contraseñas protegidas»)
-- [ ] 2.3 Implementar el servicio de inicio y cierre de sesión, y verificar con pruebas los escenarios de credenciales válidas, contraseña incorrecta y correo no registrado (mismo código y mismo mensaje en los dos últimos)
-- [ ] 2.4 Implementar la exigencia de autenticación y la comprobación de rol en los servicios (design D6), y verificar con pruebas los escenarios `NO_AUTENTICADO` y «Estudiante y docente tienen los mismos permisos»
-- [ ] 2.5 Crear las vistas y plantillas de inicio y cierre de sesión, y verificar con pruebas de integración que tras cerrar sesión la siguiente petición protegida responde `NO_AUTENTICADO` y que ninguna respuesta incluye la contraseña
-- [ ] 2.6 Añadir la orden de gestión para crear el primer administrador (design D11), documentarla en el `README.md` y verificar que, siguiendo el README, se puede iniciar sesión como administrador
+- [x] 2.1 Implementar el error de dominio con `codigo` y `mensaje` y la lista de códigos de design D5, y verificar con pruebas unitarias que cada código existe y que el error expone ambos campos
+- [x] 2.2 Crear el modelo de usuario propio (correo único, nombre y `rol` con los tres valores) con su migración, y verificar con pruebas los escenarios «Usuario con un único rol» y «Contraseña no recuperable» (requisitos «Roles reconocidos» y «Contraseñas protegidas»)
+- [x] 2.3 Implementar el servicio de inicio y cierre de sesión, y verificar con pruebas los escenarios de credenciales válidas, contraseña incorrecta y correo no registrado (mismo código y mismo mensaje en los dos últimos)
+- [x] 2.4 Implementar la exigencia de autenticación y la comprobación de rol en los servicios (design D6), y verificar con pruebas los escenarios `NO_AUTENTICADO` y «Estudiante y docente tienen los mismos permisos»
+- [x] 2.5 Crear las vistas y plantillas de inicio y cierre de sesión, y verificar con pruebas de integración que tras cerrar sesión la siguiente petición protegida responde `NO_AUTENTICADO` y que ninguna respuesta incluye la contraseña
+- [x] 2.6 Añadir la orden de gestión para crear el primer administrador (design D11), documentarla en el `README.md` y verificar que, siguiendo el README, se puede iniciar sesión como administrador
 
 ## 3. Gestión de espacios (`gestion-espacios`)
 
