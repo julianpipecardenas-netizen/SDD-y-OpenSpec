@@ -1,0 +1,5 @@
+# Dependencias del proyecto (PLAN 7.2).
+# Django 5.2 es la versión LTS (soporte a largo plazo) y funciona con Python 3.10 o superior.
+Django>=5.2,<5.3
+pytest>=8.0
+pytest-django>=4.8
