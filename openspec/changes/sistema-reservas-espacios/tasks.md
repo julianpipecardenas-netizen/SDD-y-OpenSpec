@@ -28,14 +28,14 @@
 
 ## 4. Creación de reservas (`creacion-reservas`)
 
-- [ ] 4.1 Crear el modelo `Reserva` con estado, fechas de auditoría, restricción `hora_fin > hora_inicio` e índice sobre espacio, fecha y estado, y verificar con una prueba que la base de datos rechaza un rango invertido
-- [ ] 4.2 Implementar la eliminación de espacios bloqueada cuando tienen reservas, y verificar con pruebas los escenarios `ESPACIO_CON_RESERVAS` y «Reservas existentes se conservan» al desactivar
-- [ ] 4.3 Implementar el marco de validadores (contexto, lista ordenada, reloj inyectable, design D4 y D9), y verificar con una prueba unitaria que se ejecutan en orden y que se detiene en la primera falla
-- [ ] 4.4 Implementar los validadores de datos obligatorios y de rango horario, y verificar con pruebas unitarias los escenarios `DATOS_INVALIDOS` (dato ausente, fecha inexistente, hora fuera de rango) y `HORARIO_INVALIDO` (fin igual, fin anterior, cruce de medianoche, reserva de un minuto)
-- [ ] 4.5 Implementar el validador de espacio existente y activo, y verificar con pruebas los escenarios `ESPACIO_NO_ENCONTRADO` y `ESPACIO_INACTIVO`
-- [ ] 4.6 Implementar el validador de reserva en el pasado, y verificar con pruebas, usando un reloj fijo, los escenarios `RESERVA_EN_PASADO` e inicio en el futuro
-- [ ] 4.7 Implementar el servicio de creación de reservas (propietario, estado `activa`, fecha de creación, rechazo sin efectos), y verificar con pruebas los escenarios «Reserva válida», «Reserva a nombre de quien la crea», «Rechazo sin efectos» y «Se informa el primer error en orden»
-- [ ] 4.8 Crear la vista y plantilla de creación de reservas, y verificar con una prueba de integración que un estudiante crea una reserva válida y que un dato inválido muestra el código y el mensaje
+- [x] 4.1 Crear el modelo `Reserva` con estado, fechas de auditoría, restricción `hora_fin > hora_inicio` e índice sobre espacio, fecha y estado, y verificar con una prueba que la base de datos rechaza un rango invertido
+- [x] 4.2 Implementar la eliminación de espacios bloqueada cuando tienen reservas, y verificar con pruebas los escenarios `ESPACIO_CON_RESERVAS` y «Reservas existentes se conservan» al desactivar
+- [x] 4.3 Implementar el marco de validadores (contexto, lista ordenada, reloj inyectable, design D4 y D9), y verificar con una prueba unitaria que se ejecutan en orden y que se detiene en la primera falla
+- [x] 4.4 Implementar los validadores de datos obligatorios y de rango horario, y verificar con pruebas unitarias los escenarios `DATOS_INVALIDOS` (dato ausente, fecha inexistente, hora fuera de rango) y `HORARIO_INVALIDO` (fin igual, fin anterior, cruce de medianoche, reserva de un minuto)
+- [x] 4.5 Implementar el validador de espacio existente y activo, y verificar con pruebas los escenarios `ESPACIO_NO_ENCONTRADO` y `ESPACIO_INACTIVO`
+- [x] 4.6 Implementar el validador de reserva en el pasado, y verificar con pruebas, usando un reloj fijo, los escenarios `RESERVA_EN_PASADO` e inicio en el futuro
+- [x] 4.7 Implementar el servicio de creación de reservas (propietario, estado `activa`, fecha de creación, rechazo sin efectos), y verificar con pruebas los escenarios «Reserva válida», «Reserva a nombre de quien la crea», «Rechazo sin efectos» y «Se informa el primer error en orden»
+- [x] 4.8 Crear la vista y plantilla de creación de reservas, y verificar con una prueba de integración que un estudiante crea una reserva válida y que un dato inválido muestra el código y el mensaje
 
 ## 5. Validación de conflictos de horario (`validacion-conflictos-horario`)
 
