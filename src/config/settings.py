@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     "reservas",
 ]
 
+# Modelo de usuario propio (design D3): se define antes de la primera migración.
+AUTH_USER_MODEL = "reservas.Usuario"
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
