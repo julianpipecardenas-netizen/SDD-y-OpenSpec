@@ -141,6 +141,11 @@ class Reserva(models.Model):
         max_length=10, choices=EstadoReserva.choices, default=EstadoReserva.ACTIVA
     )
     creada_en = models.DateTimeField(default=timezone.now)
+    cancelada_en = models.DateTimeField(null=True, blank=True)
+    cancelada_por = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True,
+        related_name="reservas_canceladas",
+    )
 
     class Meta:
         verbose_name = "reserva"
