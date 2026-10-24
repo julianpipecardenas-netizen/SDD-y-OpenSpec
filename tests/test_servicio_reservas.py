@@ -112,3 +112,24 @@ def test_reloj_real_por_defecto(estudiante, espacio):
     with pytest.raises(ErrorDominio) as info:
         servicio.crear_reserva(estudiante, espacio.pk, "2000-01-01", "10:00", "12:00")
     assert info.value.codigo == errores.RESERVA_EN_PASADO
+
+
+def test_servicio_rechaza_reserva_de_mas_de_cuatro_horas_sin_guardarla(estudiante, espacio):
+    """Spec: limite-duracion-reserva / Duración máxima individual / Más de cuatro horas."""
+    assert codigo_de(estudiante, espacio.pk, inicio="10:00", fin="14:01") == errores.DURACION_RESERVA_EXCEDIDA
+    assert Reserva.objects.count() == 0
+
+
+def test_servicio_acepta_reserva_de_exactamente_cuatro_horas(estudiante, espacio):
+    """Spec: limite-duracion-reserva / Duración máxima individual / Cuatro horas exactas."""
+    reserva = reservar(estudiante, espacio.pk, inicio="10:00", fin="14:00")
+    assert reserva.pk is not None
+    assert (reserva.hora_inicio, reserva.hora_fin) == (time(10, 0), time(14, 0))
+
+
+def test_reserva_de_dia_anterior_no_acumula_duracion(estudiante, espacio):
+    """Spec: limite-duracion-reserva / Duración máxima individual / Las horas de días anteriores no se acumulan."""
+    anterior = reservar(estudiante, espacio.pk, fecha="2030-03-15", inicio="10:00", fin="14:00")
+    nueva = reservar(estudiante, espacio.pk, fecha="2030-03-16", inicio="10:00", fin="14:00")
+    assert anterior.pk != nueva.pk
+    assert nueva.fecha.isoformat() == "2030-03-16"

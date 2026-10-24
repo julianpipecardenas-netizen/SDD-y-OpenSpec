@@ -15,6 +15,7 @@ from reservas.services.validadores import (
     ContextoReserva,
     validar_datos_obligatorios,
     validar_rango_horario,
+    validar_duracion_maxima,
 )
 
 BOGOTA = ZoneInfo("America/Bogota")
@@ -99,3 +100,21 @@ def test_reserva_que_cruza_la_medianoche():
 def test_reserva_minima_de_un_minuto():
     """Spec: creacion-reservas / Rango horario válido / Reserva mínima de un minuto."""
     assert validar_rango_horario(contexto(hora_inicio="10:00", hora_fin="10:01")) is None
+
+
+# --- Duración máxima por reserva individual (cambio de fase 4) -----------------
+
+def test_duracion_exactamente_cuatro_horas_esta_permitida():
+    """Spec: limite-duracion-reserva / Duración máxima individual / Cuatro horas exactas."""
+    assert validar_duracion_maxima(contexto(hora_inicio="10:00", hora_fin="14:00")) is None
+
+
+def test_duracion_mayor_a_cuatro_horas_se_rechaza():
+    """Spec: limite-duracion-reserva / Duración máxima individual / Más de cuatro horas."""
+    ctx = contexto(hora_inicio="10:00", hora_fin="14:01")
+    assert codigo_de(validar_duracion_maxima, ctx) == errores.DURACION_RESERVA_EXCEDIDA
+
+
+def test_duracion_inferior_a_cuatro_horas_esta_permitida():
+    """Spec: limite-duracion-reserva / Duración máxima individual / Menos de cuatro horas."""
+    assert validar_duracion_maxima(contexto(hora_inicio="10:00", hora_fin="13:59")) is None

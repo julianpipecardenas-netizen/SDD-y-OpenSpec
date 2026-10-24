@@ -51,3 +51,27 @@ def test_consistencia_disponibilidad_con_creacion(fabrica_reservas, estudiante, 
     with pytest.raises(ErrorDominio) as exc:
         crear_reserva(estudiante, espacio.pk, '2035-03-15', '11:00', '12:30', ahora=ahora)
     assert exc.value.codigo == 'CONFLICTO_HORARIO'
+
+
+def test_espacio_inactivo_para_estudiante(fabrica_reservas, estudiante, espacio):
+    """Spec: consulta-disponibilidad / Validación de la consulta / Espacio inactivo para un estudiante."""
+    espacio.activo = False
+    espacio.save(update_fields=["activo"])
+    with pytest.raises(ErrorDominio) as exc:
+        consultar_disponibilidad(estudiante, espacio.pk, "2030-03-15")
+    assert exc.value.codigo == "ESPACIO_INACTIVO"
+
+
+def test_consultar_fecha_pasada_devuelve_disponibilidad(fabrica_reservas, estudiante, espacio):
+    """Spec: consulta-disponibilidad / Validación de la consulta / Fecha pasada."""
+    fabrica_reservas(fecha=date(2020, 3, 15), inicio=time(10), fin=time(12))
+    resultado = consultar_disponibilidad(estudiante, espacio.pk, "2020-03-15")
+    assert resultado["ocupados"][0]["inicio"] == time(10)
+    assert resultado["ocupados"][0]["fin"] == time(12)
+
+
+def test_espacio_inexistente_en_consulta_de_disponibilidad(estudiante):
+    """Spec: consulta-disponibilidad / Validación de la consulta / Espacio inexistente."""
+    with pytest.raises(ErrorDominio) as exc:
+        consultar_disponibilidad(estudiante, 999999, "2030-03-15")
+    assert exc.value.codigo == "ESPACIO_NO_ENCONTRADO"
