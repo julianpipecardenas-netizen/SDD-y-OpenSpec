@@ -80,6 +80,16 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+        "OPTIONS": {
+            # Toda transacción toma el bloqueo de escritura al empezar, antes de
+            # leer. Así la comprobación de conflicto y la inserción de una
+            # reserva no se pueden intercalar con las de otra solicitud
+            # (design D7). Requiere Django 5.1 o superior.
+            "transaction_mode": "IMMEDIATE",
+        },
+        # Archivo real (y no memoria compartida) para poder probar la
+        # concurrencia con hilos; se borra al terminar las pruebas.
+        "TEST": {"NAME": BASE_DIR / "db_pruebas.sqlite3"},
     }
 }
 
