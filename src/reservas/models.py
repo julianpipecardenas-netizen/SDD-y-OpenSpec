@@ -3,6 +3,7 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+from django.db.models.functions import Lower
 
 
 class Rol(models.TextChoices):
@@ -75,3 +76,39 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.nombre} <{self.email}>"
+
+
+class TipoEspacio(models.TextChoices):
+    """Tipos de espacio permitidos (spec gestion-espacios / Datos de un espacio)."""
+
+    AULA = "aula", "Aula"
+    LABORATORIO = "laboratorio", "Laboratorio"
+    SALA_ESTUDIO = "sala_estudio", "Sala de estudio"
+    AUDITORIO = "auditorio", "Auditorio"
+
+
+class Espacio(models.Model):
+    """Espacio académico que se puede reservar."""
+
+    nombre = models.CharField(max_length=100)
+    tipo = models.CharField(max_length=20, choices=TipoEspacio.choices)
+    capacidad = models.IntegerField(help_text="Dato informativo; no restringe reservas.")
+    activo = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "espacio"
+        verbose_name_plural = "espacios"
+        ordering = ["nombre"]
+        constraints = [
+            # Nombre único sin distinguir mayúsculas.
+            models.UniqueConstraint(Lower("nombre"), name="espacio_nombre_unico"),
+            models.CheckConstraint(
+                condition=models.Q(capacidad__gt=0), name="espacio_capacidad_positiva"
+            ),
+            models.CheckConstraint(
+                condition=models.Q(tipo__in=TipoEspacio.values), name="espacio_tipo_valido"
+            ),
+        ]
+
+    def __str__(self):
+        return self.nombre

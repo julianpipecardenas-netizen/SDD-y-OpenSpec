@@ -2,7 +2,7 @@
 
 import pytest
 
-from reservas.models import Rol, Usuario
+from reservas.models import Espacio, Rol, TipoEspacio, Usuario
 
 CONTRASENA = "clave-de-prueba-123"
 
@@ -24,3 +24,10 @@ def docente(db):
 @pytest.fixture
 def administrador(db):
     return Usuario.objects.create_superuser("admin@uni.edu", "Ana Admin", CONTRASENA)
+
+
+@pytest.fixture
+def espacio(db):
+    return Espacio.objects.create(
+        nombre="Lab 301", tipo=TipoEspacio.LABORATORIO, capacidad=30
+    )
