@@ -53,14 +53,27 @@ python src/manage.py check
 ```
 Debe responder `System check identified no issues (0 silenced).`
 
+## Primera ejecución: base de datos y primer administrador
+
+Con el entorno virtual activado, desde la raíz del repositorio:
+
+```
+python src/manage.py migrate
+python src/manage.py createsuperuser
+```
+`migrate` crea la base de datos SQLite (`src/db.sqlite3`, no se versiona). `createsuperuser` pregunta el **correo**, el **nombre** y la **contraseña** del primer administrador; ese usuario recibe automáticamente el rol `administrador`.
+
+Los demás usuarios (estudiantes y docentes) no se registran solos: los crea el administrador desde el panel de administración, en <http://127.0.0.1:8000/admin/> → *Usuarios* → *Añadir usuario*, eligiendo su rol.
+
 ## Ejecutar el servidor
 
 ```
 python src/manage.py runserver
 ```
-Abre <http://127.0.0.1:8000/>. Mientras no se implementen las pantallas del sistema, se muestra la página de bienvenida de Django. Para detenerlo, pulsa `Ctrl + C`.
+- Sistema: <http://127.0.0.1:8000/> (pide iniciar sesión con correo y contraseña).
+- Panel de administración: <http://127.0.0.1:8000/admin/>.
 
-> **Aviso esperado:** la consola mostrará `You have 18 unapplied migration(s)`. Por ahora **no ejecutes `migrate`**: la base de datos se crea cuando se defina el modelo de usuario del sistema.
+Para detener el servidor, pulsa `Ctrl + C`.
 
 ## Ejecutar las pruebas
 
@@ -73,8 +86,7 @@ Ejecuta toda la suite desde la raíz del repositorio con el entorno virtual acti
 
 - Zona horaria única del sistema: `America/Bogota`.
 - Base de datos: SQLite (archivo local, no se versiona).
-
-*(Las instrucciones para crear la base de datos y el primer administrador se añadirán cuando se implemente la autenticación.)*
+- Roles: `estudiante`, `docente` y `administrador`. Estudiante y docente tienen los mismos permisos.
 
 ## Estructura del repositorio
 
