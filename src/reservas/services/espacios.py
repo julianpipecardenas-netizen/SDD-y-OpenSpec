@@ -4,10 +4,11 @@ Las operaciones de escritura son exclusivas del administrador (design D6).
 """
 
 from django.db import IntegrityError, transaction
+from django.db.models import ProtectedError
 
 from reservas import errores
 from reservas.errores import ErrorDominio
-from reservas.models import Espacio, TipoEspacio
+from reservas.models import Espacio, Reserva, TipoEspacio
 from reservas.services.acceso import (
     ROLES_ADMINISTRADOR,
     ROLES_TODOS,
@@ -113,6 +114,24 @@ def desactivar_espacio(actor, espacio_id):
 def activar_espacio(actor, espacio_id):
     """El espacio vuelve a aceptar reservas nuevas."""
     return _cambiar_estado(actor, espacio_id, True)
+
+
+def eliminar_espacio(actor, espacio_id):
+    """Elimina un espacio. Se bloquea si tiene reservas, de cualquier estado.
+
+    Spec gestion-espacios / Activación y desactivación: los espacios no se
+    eliminan físicamente mientras tengan reservas asociadas. Para dejar de
+    ofrecer un espacio con reservas, se desactiva.
+    """
+    exigir_rol(actor, *ROLES_ADMINISTRADOR)
+    espacio = obtener_o_fallar(espacio_id)
+    if Reserva.objects.filter(espacio=espacio).exists():
+        raise ErrorDominio(errores.ESPACIO_CON_RESERVAS)
+    try:
+        with transaction.atomic():
+            espacio.delete()
+    except ProtectedError:  # una reserva se creó justo antes (clave foránea protegida)
+        raise ErrorDominio(errores.ESPACIO_CON_RESERVAS)
 
 
 def listar_espacios(actor):
