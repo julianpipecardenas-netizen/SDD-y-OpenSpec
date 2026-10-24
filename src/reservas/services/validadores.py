@@ -12,7 +12,7 @@ servicio le entrega ya resueltos el espacio y la hora actual.
 """
 
 from dataclasses import dataclass
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 from typing import Any, Optional
 
 from reservas import errores
@@ -127,6 +127,19 @@ def validar_rango_horario(contexto):
         raise ErrorDominio(errores.HORARIO_INVALIDO)
 
 
+def validar_duracion_maxima(contexto):
+    """La reserva individual no puede superar cuatro horas (cambio fase 4).
+
+    La regla se aplica a cada solicitud por separado. No acumula reservas de
+    días anteriores ni suma reservas de otros días. Una duración exactamente
+    igual a cuatro horas está permitida.
+    """
+    _, inicio, fin = interpretar_horario(contexto)
+    duracion = datetime.combine(date.min, fin) - datetime.combine(date.min, inicio)
+    if duracion > timedelta(hours=4):
+        raise ErrorDominio(errores.DURACION_RESERVA_EXCEDIDA)
+
+
 def validar_espacio_activo(contexto):
     """El espacio existe y está activo."""
     if contexto.espacio is None:
@@ -172,5 +185,6 @@ VALIDADORES_RESERVA = (
     validar_rango_horario,
     validar_espacio_activo,
     validar_no_en_el_pasado,
+    validar_duracion_maxima,
     validar_no_solapamiento,
 )

@@ -20,6 +20,7 @@ ESPACIO_CON_RESERVAS = "ESPACIO_CON_RESERVAS"
 RESERVA_NO_ENCONTRADA = "RESERVA_NO_ENCONTRADA"
 RESERVA_YA_CANCELADA = "RESERVA_YA_CANCELADA"
 RESERVA_NO_CANCELABLE = "RESERVA_NO_CANCELABLE"
+DURACION_RESERVA_EXCEDIDA = "DURACION_RESERVA_EXCEDIDA"
 
 # Mensaje por defecto de cada código.
 MENSAJES = {
@@ -40,6 +41,7 @@ MENSAJES = {
     RESERVA_NO_ENCONTRADA: "La reserva no existe.",
     RESERVA_YA_CANCELADA: "La reserva ya estaba cancelada.",
     RESERVA_NO_CANCELABLE: "No se puede cancelar una reserva que ya comenzó.",
+    DURACION_RESERVA_EXCEDIDA: "La duración máxima de una reserva es de cuatro horas.",
 }
 
 CODIGOS = tuple(MENSAJES)
