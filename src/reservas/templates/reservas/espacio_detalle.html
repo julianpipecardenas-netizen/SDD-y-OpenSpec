@@ -1,0 +1,23 @@
+{% extends "reservas/base.html" %}
+{% block titulo %}{{ espacio.nombre }}{% endblock %}
+{% block contenido %}
+  <h2>{{ espacio.nombre }}</h2>
+  <ul>
+    <li>Tipo: {{ espacio.get_tipo_display }}</li>
+    <li>Capacidad: {{ espacio.capacidad }}</li>
+    <li>Estado: {% if espacio.activo %}Activo{% else %}Inactivo{% endif %}</li>
+  </ul>
+  {% if es_admin %}
+    <p><a href="{% url 'espacio_editar' espacio.pk %}">Editar</a></p>
+    {% if espacio.activo %}
+      <form method="post" action="{% url 'espacio_desactivar' espacio.pk %}">
+        {% csrf_token %}<button type="submit">Desactivar</button>
+      </form>
+    {% else %}
+      <form method="post" action="{% url 'espacio_activar' espacio.pk %}">
+        {% csrf_token %}<button type="submit">Activar</button>
+      </form>
+    {% endif %}
+  {% endif %}
+  <p><a href="{% url 'espacios' %}">Volver a espacios</a></p>
+{% endblock %}

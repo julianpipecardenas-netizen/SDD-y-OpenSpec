@@ -1,0 +1,26 @@
+{% extends "reservas/base.html" %}
+{% block titulo %}{% if espacio %}Editar espacio{% else %}Nuevo espacio{% endif %}{% endblock %}
+{% block contenido %}
+  <h2>{% if espacio %}Editar espacio{% else %}Nuevo espacio{% endif %}</h2>
+  {% if error %}
+    <div class="error" role="alert">
+      <span class="codigo">{{ error.codigo }}</span>
+      <p>{{ error.mensaje }}</p>
+    </div>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <label for="nombre">Nombre</label>
+    <input id="nombre" name="nombre" maxlength="100" value="{{ datos.nombre|default:'' }}" required>
+    <label for="tipo">Tipo</label>
+    <select id="tipo" name="tipo" required>
+      {% for valor, etiqueta in tipos %}
+        <option value="{{ valor }}" {% if datos.tipo == valor %}selected{% endif %}>{{ etiqueta }}</option>
+      {% endfor %}
+    </select>
+    <label for="capacidad">Capacidad</label>
+    <input id="capacidad" name="capacidad" type="number" min="1" value="{{ datos.capacidad|default:'' }}" required>
+    <button type="submit">Guardar</button>
+  </form>
+  <p><a href="{% url 'espacios' %}">Cancelar</a></p>
+{% endblock %}

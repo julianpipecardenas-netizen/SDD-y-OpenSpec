@@ -15,6 +15,9 @@
 </head>
 <body>
   <h1>Reserva de espacios académicos</h1>
+  {% if user.is_authenticated %}
+    <nav><a href="{% url 'inicio' %}">Inicio</a> | <a href="{% url 'espacios' %}">Espacios</a></nav>
+  {% endif %}
   {% block contenido %}{% endblock %}
 </body>
 </html>
