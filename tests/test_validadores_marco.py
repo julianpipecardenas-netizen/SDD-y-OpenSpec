@@ -13,6 +13,7 @@ from reservas.services.validadores import (
     validar_datos_obligatorios,
     validar_espacio_activo,
     validar_no_en_el_pasado,
+    validar_no_solapamiento,
     validar_rango_horario,
 )
 
@@ -55,4 +56,5 @@ def test_el_orden_registrado_es_el_de_la_spec():
         validar_rango_horario,
         validar_espacio_activo,
         validar_no_en_el_pasado,
+        validar_no_solapamiento,
     )
