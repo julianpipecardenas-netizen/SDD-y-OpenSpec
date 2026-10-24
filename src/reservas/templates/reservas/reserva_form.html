@@ -1,0 +1,28 @@
+{% extends "reservas/base.html" %}
+{% block titulo %}Nueva reserva{% endblock %}
+{% block contenido %}
+  <h2>Nueva reserva</h2>
+  {% if error %}
+    <div class="error" role="alert">
+      <span class="codigo">{{ error.codigo }}</span>
+      <p>{{ error.mensaje }}</p>
+    </div>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <label for="espacio">Espacio</label>
+    <select id="espacio" name="espacio" required>
+      {% for espacio in espacios %}
+        <option value="{{ espacio.pk }}" {% if datos.espacio_id == espacio.pk|stringformat:"s" %}selected{% endif %}>{{ espacio.nombre }}</option>
+      {% endfor %}
+    </select>
+    <label for="fecha">Fecha</label>
+    <input id="fecha" name="fecha" type="date" value="{{ datos.fecha|default:'' }}" required>
+    <label for="hora_inicio">Hora de inicio</label>
+    <input id="hora_inicio" name="hora_inicio" type="time" value="{{ datos.hora_inicio|default:'' }}" required>
+    <label for="hora_fin">Hora de fin</label>
+    <input id="hora_fin" name="hora_fin" type="time" value="{{ datos.hora_fin|default:'' }}" required>
+    <button type="submit">Reservar</button>
+  </form>
+  <p><a href="{% url 'inicio' %}">Cancelar</a></p>
+{% endblock %}
