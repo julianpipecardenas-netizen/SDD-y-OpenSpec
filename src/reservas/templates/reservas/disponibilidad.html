@@ -1,0 +1,12 @@
+{% extends "reservas/base.html" %}
+{% block titulo %}Consultar disponibilidad{% endblock %}
+{% block contenido %}
+<h2>Consultar disponibilidad</h2>
+<form method="get">
+<label for="espacio">Espacio</label><select id="espacio" name="espacio" required>{% for espacio in espacios %}<option value="{{ espacio.pk }}" {% if datos.espacio_id == espacio.pk|stringformat:"s" %}selected{% endif %}>{{ espacio.nombre }}</option>{% endfor %}</select>
+<label for="fecha">Fecha</label><input id="fecha" name="fecha" type="date" value="{{ datos.fecha }}" required>
+<button type="submit">Consultar</button></form>
+{% if resultado %}<h3>{{ resultado.espacio.nombre }} — {{ resultado.fecha }}</h3>
+<h4>Intervalos ocupados</h4><ul>{% for i in resultado.ocupados %}<li>{{ i.inicio|time:"H:i" }}–{{ i.fin|time:"H:i" }}{% if i.reserva_id %} — Reserva #{{ i.reserva_id }}: {{ i.usuario }} ({{ i.correo }}){% endif %}</li>{% empty %}<li>No hay intervalos ocupados.</li>{% endfor %}</ul>
+<h4>Intervalos libres</h4><ul>{% for i in resultado.libres %}<li>{{ i.inicio|time:"H:i" }}–{{ i.fin|time:"H:i" }}</li>{% empty %}<li>No hay intervalos libres.</li>{% endfor %}</ul>{% endif %}
+{% endblock %}

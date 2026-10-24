@@ -16,7 +16,7 @@
 <body>
   <h1>Reserva de espacios académicos</h1>
   {% if user.is_authenticated %}
-    <nav><a href="{% url 'inicio' %}">Inicio</a> | <a href="{% url 'espacios' %}">Espacios</a> | <a href="{% url 'reserva_nueva' %}">Reservar</a></nav>
+    <nav><a href="{% url 'inicio' %}">Inicio</a> | <a href="{% url 'espacios' %}">Espacios</a> | <a href="{% url 'reserva_nueva' %}">Reservar</a> | <a href="{% url 'disponibilidad' %}">Disponibilidad</a> | <a href="{% url 'reservas_lista' %}">Reservas</a></nav>
   {% endif %}
   {% if messages %}<ul>{% for mensaje in messages %}<li>{{ mensaje }}</li>{% endfor %}</ul>{% endif %}
   {% block contenido %}{% endblock %}
