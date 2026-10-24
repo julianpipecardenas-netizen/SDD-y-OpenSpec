@@ -45,31 +45,31 @@
 - [x] 5.4 Hacer atómica la comprobación y la inserción de la reserva (design D7), y verificar con una prueba de concurrencia con hilos que solo una de dos solicitudes simultáneas queda activa y la otra recibe `CONFLICTO_HORARIO`
 - [x] 5.5 Mostrar el conflicto en la vista de creación con el mensaje «El espacio ya está reservado en ese horario», y verificar con una prueba de integración que se muestra el código y ese mensaje
 
-> **Estado de esta entrega:** se añadieron los servicios, vistas, plantillas, migración y pruebas de los grupos 6 y 7. Las casillas de verificación se mantienen pendientes hasta ejecutar `pytest` y validar las migraciones en el entorno del proyecto; no se marcan tareas como verificadas basándose solo en revisión estática.
+> **Verificación registrada:** el usuario ejecutó `pytest` y obtuvo 280 pruebas aprobadas, y `openspec validate --strict` finalizó correctamente para el cambio inicial. El script de trazabilidad se incorporó y se comprobó que detecta todos los escenarios del cambio inicial.
 
 ## 6. Consulta de disponibilidad (`consulta-disponibilidad`)
 
-- [ ] 6.1 Implementar el cálculo de intervalos ocupados y libres entre las 00:00 y las 23:59 (design D8), y verificar con pruebas unitarias los escenarios de día con reservas, día sin reservas y reservas contiguas
-- [ ] 6.2 Implementar el servicio de disponibilidad con validación de entrada, exclusión de reservas canceladas y privacidad por rol, y verificar con pruebas los escenarios de fecha inválida, espacio inexistente, espacio inactivo, fecha pasada, reserva cancelada y datos visibles para estudiante frente a administrador
-- [ ] 6.3 Crear la vista y plantilla de disponibilidad, y verificar con una prueba de integración que un estudiante ve los intervalos sin datos de otros usuarios
-- [ ] 6.4 Verificar la consistencia entre disponibilidad y creación, con pruebas de los escenarios «Reservar un intervalo libre informado» y «Reservar sobre un intervalo ocupado informado»
-- [ ] 6.5 Verificar el rendimiento con una prueba que carga 1000 reservas activas en un espacio y comprueba que la consulta responde en menos de 2 segundos (RNF-05)
+- [x] 6.1 Implementar el cálculo de intervalos ocupados y libres entre las 00:00 y las 23:59 (design D8), y verificar con pruebas unitarias los escenarios de día con reservas, día sin reservas y reservas contiguas
+- [x] 6.2 Implementar el servicio de disponibilidad con validación de entrada, exclusión de reservas canceladas y privacidad por rol, y verificar con pruebas los escenarios de fecha inválida, espacio inexistente, espacio inactivo, fecha pasada, reserva cancelada y datos visibles para estudiante frente a administrador
+- [x] 6.3 Crear la vista y plantilla de disponibilidad, y verificar con una prueba de integración que un estudiante ve los intervalos sin datos de otros usuarios
+- [x] 6.4 Verificar la consistencia entre disponibilidad y creación, con pruebas de los escenarios «Reservar un intervalo libre informado» y «Reservar sobre un intervalo ocupado informado»
+- [x] 6.5 Verificar el rendimiento con una prueba que carga 1000 reservas activas en un espacio y comprueba que la consulta responde en menos de 2 segundos (RNF-05)
 
 ## 7. Consulta y cancelación de reservas (`consulta-cancelacion-reservas`)
 
-- [ ] 7.1 Implementar el listado de reservas propias y el listado total del administrador, y verificar con pruebas los escenarios de usuario con reservas, aislamiento entre usuarios, usuario sin reservas y administrador que lista todo
-- [ ] 7.2 Implementar la consulta de una reserva por identificador, y verificar con pruebas los escenarios de reserva propia, reserva ajena (`SIN_PERMISO`), reserva inexistente y consulta del administrador
-- [ ] 7.3 Añadir los campos `cancelada_en` y `cancelada_por` con su migración e implementar la cancelación en el orden de validación de la spec, y verificar con pruebas los escenarios de cancelación propia, de administrador, `SIN_PERMISO`, `RESERVA_YA_CANCELADA`, `RESERVA_NO_CANCELABLE`, `RESERVA_NO_ENCONTRADA` y «Reserva ajena y ya cancelada»
-- [ ] 7.4 Verificar que la cancelación libera el horario, con una prueba que cancela una reserva, la reserva de nuevo y comprueba que el intervalo aparece libre
-- [ ] 7.5 Crear las vistas y plantillas de listado, detalle y cancelación, y verificar con pruebas de integración el flujo completo de un estudiante y de un administrador
+- [x] 7.1 Implementar el listado de reservas propias y el listado total del administrador, y verificar con pruebas los escenarios de usuario con reservas, aislamiento entre usuarios, usuario sin reservas y administrador que lista todo
+- [x] 7.2 Implementar la consulta de una reserva por identificador, y verificar con pruebas los escenarios de reserva propia, reserva ajena (`SIN_PERMISO`), reserva inexistente y consulta del administrador
+- [x] 7.3 Añadir los campos `cancelada_en` y `cancelada_por` con su migración e implementar la cancelación en el orden de validación de la spec, y verificar con pruebas los escenarios de cancelación propia, de administrador, `SIN_PERMISO`, `RESERVA_YA_CANCELADA`, `RESERVA_NO_CANCELABLE`, `RESERVA_NO_ENCONTRADA` y «Reserva ajena y ya cancelada»
+- [x] 7.4 Verificar que la cancelación libera el horario, con una prueba que cancela una reserva, la reserva de nuevo y comprueba que el intervalo aparece libre
+- [x] 7.5 Crear las vistas y plantillas de listado, detalle y cancelación, y verificar con pruebas de integración el flujo completo de un estudiante y de un administrador
 
 ## 8. Verificación de integración
 
-- [ ] 8.1 Ejecutar la suite completa con `pytest` y verificar que todas las pruebas pasan
-- [ ] 8.2 Crear un script que lea los escenarios de `specs/` y las referencias `Spec:` de las pruebas, y verificar que no queda ningún escenario sin prueba asociada
-- [ ] 8.3 Ejecutar `openspec validate sistema-reservas-espacios --strict` y verificar que no reporta errores
+- [x] 8.1 Ejecutar la suite completa con `pytest` y verificar que todas las pruebas pasan
+- [x] 8.2 Crear un script que lea los escenarios de `specs/` y las referencias `Spec:` de las pruebas, y verificar que no queda ningún escenario sin prueba asociada
+- [x] 8.3 Ejecutar `openspec validate sistema-reservas-espacios --strict` y verificar que no reporta errores
 
-## Workflow follow-up
+## Cierre del cambio inicial
 
-- Archivar el cambio con OpenSpec (`/opsx:archive`) una vez aprobado, para que las specs queden en `openspec/specs/` y los cambios posteriores puedan modificarlas.
-- Verificar el resultado archivado y registrar el commit correspondiente.
+- [x] Archivar el cambio inicial y sincronizar las seis capacidades estables en `openspec/specs/`.
+- [x] Conservar la propuesta, el diseño, las tareas y los deltas originales en esta carpeta de archivo.
