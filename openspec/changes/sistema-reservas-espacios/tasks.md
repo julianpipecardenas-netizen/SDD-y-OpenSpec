@@ -20,11 +20,11 @@
 
 ## 3. Gestión de espacios (`gestion-espacios`)
 
-- [ ] 3.1 Crear el modelo `Espacio` con sus restricciones (nombre único sin distinguir mayúsculas, capacidad mayor que cero, tipos permitidos), y verificar con pruebas que la base de datos rechaza duplicados y capacidades inválidas
-- [ ] 3.2 Implementar el servicio para crear y editar espacios restringido al administrador, y verificar con pruebas los escenarios de espacio válido, `ESPACIO_DUPLICADO`, capacidad inválida, tipo no permitido y `SIN_PERMISO`
-- [ ] 3.3 Implementar la activación y desactivación de espacios, y verificar con pruebas los escenarios «Desactivar un espacio» y «Reactivar un espacio»
-- [ ] 3.4 Implementar el listado y la consulta de espacios según el rol, y verificar con pruebas los escenarios de estudiante, administrador, `ESPACIO_NO_ENCONTRADO` y `ESPACIO_INACTIVO`
-- [ ] 3.5 Crear las vistas y plantillas de espacios, y verificar con pruebas de integración que el administrador gestiona espacios y que un docente recibe `SIN_PERMISO`
+- [x] 3.1 Crear el modelo `Espacio` con sus restricciones (nombre único sin distinguir mayúsculas, capacidad mayor que cero, tipos permitidos), y verificar con pruebas que la base de datos rechaza duplicados y capacidades inválidas
+- [x] 3.2 Implementar el servicio para crear y editar espacios restringido al administrador, y verificar con pruebas los escenarios de espacio válido, `ESPACIO_DUPLICADO`, capacidad inválida, tipo no permitido y `SIN_PERMISO`
+- [x] 3.3 Implementar la activación y desactivación de espacios, y verificar con pruebas los escenarios «Desactivar un espacio» y «Reactivar un espacio»
+- [x] 3.4 Implementar el listado y la consulta de espacios según el rol, y verificar con pruebas los escenarios de estudiante, administrador, `ESPACIO_NO_ENCONTRADO` y `ESPACIO_INACTIVO`
+- [x] 3.5 Crear las vistas y plantillas de espacios, y verificar con pruebas de integración que el administrador gestiona espacios y que un docente recibe `SIN_PERMISO`
 
 ## 4. Creación de reservas (`creacion-reservas`)
 
