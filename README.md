@@ -2,14 +2,16 @@
 
 Aplicación web para consultar la disponibilidad y reservar espacios académicos (aulas, laboratorios, salas de estudio y auditorios) sin conflictos de horario. Se desarrolla con **Spec-Driven Development**: primero el plan, luego las especificaciones con OpenSpec y después la implementación asistida por IA.
 
-> **Estado:** en construcción. Este README crece junto con el sistema; cada sección se completa cuando la funcionalidad correspondiente se implementa.
+> **Estado:** implementación completa para la versión académica, con una nueva regla de duración máxima individual en su cambio OpenSpec activo. La suite final debe ejecutarse en el entorno local después de descomprimir el ZIP.
 
 ## Documentación del proyecto
 
 | Archivo | Contenido |
 |---|---|
 | `PLAN_INGENIERIA.md` | Planificación y justificación técnica inicial |
-| `openspec/` | Especificaciones, propuestas, diseño y tareas (OpenSpec) |
+| `openspec/specs/` | Especificaciones estables de la versión inicial |
+| `openspec/changes/archive/` | Cambio inicial archivado con propuesta, diseño, tareas y especificaciones originales |
+| `openspec/changes/limite-duracion-reserva/` | Cambio de fase 4: máximo de cuatro horas por reserva individual |
 | `docs/REVISION_ESPECIFICACIONES.md` | Registro de la revisión de las especificaciones |
 | `INFORME_FINAL.md` | Resultados, trazabilidad y conclusiones del proceso SDD |
 
@@ -85,7 +87,18 @@ pytest
 ```
 Ejecuta toda la suite desde la raíz del repositorio con el entorno virtual activado. La prueba de rendimiento comprueba que consultar un día con 1000 reservas repartidas entre fechas tarda menos de 2 segundos.
 
-Para comprobar la trazabilidad básica entre escenarios OpenSpec y docstrings de pruebas: `python scripts_verificar_trazabilidad.py`. La salida debe revisarse como apoyo; no sustituye la comprobación manual escenario por escenario.
+Para comprobar que cada escenario de las especificaciones aparece en un archivo de pruebas con una referencia `Spec:` de su capacidad, ejecuta `python scripts_verificar_trazabilidad.py`. La comprobación es estática y no sustituye la ejecución de `pytest` ni la revisión humana.
+
+
+## Verificación rápida en PowerShell
+
+Con el entorno virtual activado y las dependencias instaladas, puedes ejecutar todos los controles en secuencia:
+
+```powershell
+.\VERIFICAR_PROYECTO.ps1
+```
+
+El script se detiene en el primer comando que falle. Si PowerShell bloquea su ejecución, puedes ejecutar los comandos listados dentro de `VERIFICAR_PROYECTO.ps1` uno por uno.
 
 ## Configuración
 
@@ -114,7 +127,8 @@ Para comprobar la trazabilidad básica entre escenarios OpenSpec y docstrings de
 
 Toda funcionalidad se define antes de programarse:
 
-1. Las especificaciones viven en `openspec/` (propuesta, specs, diseño y tareas por cambio).
-2. Un cambio funcional se propone y se revisa en OpenSpec antes de tocar el código.
-3. Cuando un cambio está implementado y verificado, se archiva y sus especificaciones pasan a `openspec/specs/`.
-4. El historial de Git conserva la secuencia plan → especificaciones → implementación.
+1. Las especificaciones estables viven en `openspec/specs/`.
+2. El cambio inicial está archivado en `openspec/changes/archive/2026-10-24-sistema-reservas-espacios/`.
+3. El cambio de fase 4 está en `openspec/changes/limite-duracion-reserva/` y define una duración máxima de cuatro horas por solicitud individual. No suma reservas de días anteriores.
+4. Después de verificar este cambio con las pruebas, debe archivarse y sincronizarse con `openspec/specs/`.
+5. El historial de Git conserva la secuencia plan → especificaciones → implementación → pruebas → documentación.

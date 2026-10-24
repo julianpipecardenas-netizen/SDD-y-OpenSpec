@@ -1,53 +1,68 @@
 # Informe final — Sistema de reserva de espacios académicos
 
-## Alcance y estado de verificación
+## 1. Objetivo y alcance
 
-El proyecto aplica Spec-Driven Development (SDD) con OpenSpec y Django. El orden esperado del proceso es plan de ingeniería, especificaciones revisadas, implementación por tareas, gestión de cambios y verificación. El historial de Git debe conservar ese orden.
+El proyecto implementa un sistema web de reserva de espacios académicos con Django 5.2, SQLite y zona horaria `America/Bogota`. El proceso se organizó mediante Spec-Driven Development (SDD): plan de ingeniería, especificaciones OpenSpec revisadas, implementación incremental, pruebas y gestión de cambios.
 
-Se implementaron las funcionalidades de disponibilidad, consulta de reservas y cancelación lógica en las capas de servicios y presentación. La cancelación conserva el registro y guarda quién y cuándo la realizó. La disponibilidad consulta solo reservas activas, calcula intervalos libres y aplica privacidad según el rol.
+El sistema incluye autenticación con roles de estudiante, docente y administrador; gestión de espacios; creación de reservas; validación de conflictos; consulta de disponibilidad; listado, consulta y cancelación lógica de reservas. La cancelación conserva la reserva y registra quién y cuándo la canceló.
 
-**Limitación de esta entrega:** el entorno de generación no tiene Django ni pytest instalados y no dispone de acceso a Internet para instalar las dependencias. Por eso no se declara que la suite esté verde ni que las migraciones y las vistas se hayan ejecutado satisfactoriamente. Sí se realizó una comprobación sintáctica de los archivos Python mediante `compileall`. Antes de entregar académicamente, ejecutar todos los comandos de verificación indicados en el README desde el entorno Windows del proyecto y corregir cualquier fallo.
+## 2. Regla incorporada en la fase 4
 
-## Trazabilidad de las funcionalidades añadidas
+Se añadió el cambio OpenSpec `limite-duracion-reserva`: **cada reserva individual puede durar como máximo cuatro horas**. Una reserva de cuatro horas exactas se permite; una de cuatro horas y un minuto se rechaza con `DURACION_RESERVA_EXCEDIDA`. El límite no acumula las horas de reservas de otros días ni de la semana anterior. La regla tiene un validador independiente y pruebas unitarias y de servicio.
 
-| Requisito | Especificación | Implementación | Pruebas añadidas |
-|---|---|---|---|
-| Calcular ocupados y libres del día | `consulta-disponibilidad` | `services/disponibilidad.py` | `test_disponibilidad.py` |
-| Ocultar identidad a estudiantes y docentes | `consulta-disponibilidad` | Servicio de disponibilidad y plantilla | `test_disponibilidad.py`, `test_vistas_disponibilidad_consultas.py` |
-| Validar espacio y fecha de consulta | `consulta-disponibilidad` | `consultar_disponibilidad` | `test_disponibilidad.py` |
-| Respetar consistencia con creación de reservas | `consulta-disponibilidad` y `creacion-reservas` | Servicios de disponibilidad y reservas | `test_disponibilidad.py` |
-| Listar reservas propias y todas para administrador | `consulta-cancelacion-reservas` | `services/consultas_reservas.py` | `test_consultas_reservas.py` |
-| Consultar detalle con autorización | `consulta-cancelacion-reservas` | `consultar_reserva` | `test_consultas_reservas.py` |
-| Cancelar sin borrar y registrar auditoría | `consulta-cancelacion-reservas` | Modelo, migración 0004 y `cancelar_reserva` | `test_consultas_reservas.py`, `test_vistas_disponibilidad_consultas.py` |
-| Rendimiento con 1000 reservas | `consulta-disponibilidad` | Índice existente sobre espacio/fecha/estado y consulta filtrada | `test_rendimiento_disponibilidad.py` |
+## 3. Organización de OpenSpec
 
-## Decisiones técnicas
+- `openspec/specs/` contiene las seis capacidades estables de la implementación inicial.
+- `openspec/changes/archive/2026-10-24-sistema-reservas-espacios/` conserva la propuesta, diseño, tareas y deltas originales de la primera implementación.
+- `openspec/changes/limite-duracion-reserva/` conserva la propuesta, diseño, tareas y delta de la regla nueva. Tras verificarla en el entorno local, debe archivarse mediante OpenSpec.
 
-- La lógica de negocio se mantiene en servicios y no en las vistas.
-- La consulta de disponibilidad devuelve únicamente franjas horarias para estudiantes y docentes; los datos de identificación se añaden solo para el administrador.
-- La cancelación es lógica: cambia el estado y registra `cancelada_en` y `cancelada_por`, conservando la reserva para auditoría.
-- Los servicios reciben el actor como argumento y aplican autorización independientemente de la interfaz.
+## 4. Trazabilidad
 
-## Dificultades y limitaciones
+| Capacidad | Código principal | Pruebas principales |
+|---|---|---|
+| `autenticacion-roles` | `services/autenticacion.py`, `services/acceso.py`, vistas de autenticación | `test_autenticacion.py`, `test_usuarios.py`, `test_vistas_autenticacion.py` |
+| `gestion-espacios` | `services/espacios.py`, vistas y modelos de espacio | `test_servicio_espacios.py`, `test_modelo_espacio.py`, `test_vistas_espacios.py` |
+| `creacion-reservas` | `services/reservas.py`, `services/validadores.py` | `test_servicio_reservas.py`, `test_validadores_datos_horario.py` |
+| `validacion-conflictos-horario` | `services/validadores.py`, transacción de creación | `test_validador_solapamiento.py`, `test_concurrencia_reservas.py`, `test_vistas_conflictos.py` |
+| `consulta-disponibilidad` | `services/disponibilidad.py` | `test_disponibilidad.py`, `test_rendimiento_disponibilidad.py` |
+| `consulta-cancelacion-reservas` | `services/consultas_reservas.py` | `test_consultas_reservas.py`, `test_vistas_disponibilidad_consultas.py` |
+| `limite-duracion-reserva` | `validadores.validar_duracion_maxima` y `errores.DURACION_RESERVA_EXCEDIDA` | `test_validadores_datos_horario.py`, `test_servicio_reservas.py` |
 
-La verificación automatizada completa no pudo ejecutarse en el entorno de construcción por ausencia de dependencias instaladas y falta de conexión al índice de paquetes. Por tanto, la revisión sintáctica no equivale a validar el comportamiento de Django, el esquema de base de datos, el rendimiento real o la concurrencia.
+El script `scripts_verificar_trazabilidad.py` comprueba que los títulos de los escenarios OpenSpec aparecen en archivos de prueba que citan la capacidad correspondiente. Esta verificación es estática y no prueba por sí sola la validez de cada aserción.
 
-## Conclusiones sobre SDD
+## 5. Verificación y resultados
 
-SDD ayuda a mantener visibles los requisitos y a convertir escenarios en pruebas verificables. OpenSpec ofrece una estructura para revisar cambios antes de programarlos y reduce el riesgo de que una IA añada comportamientos no solicitados. Su coste es mantener sincronizados propuesta, diseño, especificaciones, tareas, código y pruebas; además, una referencia `Spec:` por sí sola no demuestra que el escenario esté cubierto correctamente. Se necesita ejecutar la suite, revisar la trazabilidad y conservar un historial de Git coherente para demostrar el proceso.
+Durante la verificación de la implementación inicial, el usuario ejecutó `pytest` y obtuvo **280 pruebas aprobadas**. También ejecutó `openspec validate --strict`, que finalizó con un resultado correcto para el cambio inicial. Después se añadieron pruebas de cobertura para escenarios previamente no referenciados y para el nuevo límite de duración.
 
-## Verificación pendiente en Windows
+**Pendiente de confirmar en la copia final:** el entorno en el que se preparó este ZIP no tiene Django/pytest instalados y no tiene acceso al índice de paquetes. Por eso no se declara como ejecutada aquí la suite final que incluye los cambios recientes. Antes de presentar el proyecto, ejecutar en Windows los comandos del apartado siguiente y registrar sus resultados reales. No se deben copiar resultados antiguos como si correspondieran a la última versión.
 
-Desde PowerShell, en la raíz del repositorio y con el entorno virtual activado:
+## 6. Comandos de verificación en Windows PowerShell
+
+Desde la raíz del proyecto, crea y activa un entorno virtual limpio:
 
 ```powershell
-pip install -r requirements.txt
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 python src/manage.py check
 python src/manage.py makemigrations --check --dry-run
 python src/manage.py migrate
 pytest
 python scripts_verificar_trazabilidad.py
-openspec validate sistema-reservas-espacios --strict
+openspec validate --strict
 ```
 
-No se debe considerar la entrega completamente verificada hasta resolver cualquier error de estos comandos y actualizar este informe con resultados reales.
+Resultados esperados: `manage.py check` sin problemas; migraciones sincronizadas; suite `pytest` completamente aprobada; script de trazabilidad sin escenarios pendientes; y OpenSpec sin errores. El comando `migrate` crea la base SQLite local; no se incluye la base de datos del usuario en el ZIP.
+
+## 7. Decisiones técnicas y dificultades
+
+- La lógica de negocio está separada de las vistas mediante servicios y validadores independientes.
+- Los intervalos se tratan como semiabiertos, por lo que dos reservas contiguas no se consideran conflicto.
+- La comprobación de conflicto y la inserción se realizan dentro de una transacción.
+- La disponibilidad muestra solo intervalos a estudiantes y docentes; los datos de identidad quedan reservados al administrador.
+- La duración máxima es una regla independiente de cada reserva, no un acumulado diario o semanal.
+- Una dificultad importante del proceso es mantener sincronizados los requisitos, el diseño, las tareas, las pruebas y la implementación. Un resultado de validación estructural de OpenSpec no reemplaza las pruebas funcionales.
+
+## 8. Conclusiones sobre SDD
+
+SDD obliga a definir y revisar el comportamiento antes de implementarlo y permite relacionar requisitos, escenarios y pruebas. OpenSpec ayuda a gestionar cambios sin modificar silenciosamente el alcance original. El coste es mantener los artefactos sincronizados y verificar que los escenarios estén cubiertos de verdad. La calidad de la entrega depende tanto del historial de Git como de ejecutar la suite completa y documentar resultados verificables.
